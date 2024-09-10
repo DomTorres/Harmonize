@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useContext } from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -12,8 +12,8 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import axiosClient from '../api/axiosConfig';
-import useAuth from '../hooks/useAuth';
 import { useNavigate } from 'react-router-dom';
+import AuthContext from '../contexts/AuthProvider';
 
 // function Copyright(props) {
 //   return (
@@ -32,7 +32,7 @@ import { useNavigate } from 'react-router-dom';
 const defaultTheme = createTheme();
 
 export default function SignIn() {
-    const { setAuth } = useAuth();
+    const { setAuth } = useContext(AuthContext);
     const navigate = useNavigate();
 
   const handleSubmit = async (e) => {

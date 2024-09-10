@@ -1,15 +1,20 @@
-import React from 'react'
-import useAuth from '../hooks/useAuth'
+import React, { useContext, useEffect } from 'react'
+import Navbar from '../components/Navbar';
 
 const Explore = () => {
-    const { auth } = useAuth();
-    console.log(auth);
+    // const { auth } = useContext(AuthContext); 
+    // const user = auth;
 
-  return (
-    <div>
-      Welcome, {auth.username}!
-    </div>
-  )
+    const user = { username: 'Dom' }
+
+    return (
+        <>
+            <Navbar />
+            <div>
+            Welcome, {user.username}!
+            </div>
+        </>
+    )
 }
 
 export default Explore

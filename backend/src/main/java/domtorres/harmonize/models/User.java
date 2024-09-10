@@ -2,13 +2,29 @@ package domtorres.harmonize.models;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Objects;
+import java.util.Set;
 
 import org.springframework.data.neo4j.core.schema.GeneratedValue;
 import org.springframework.data.neo4j.core.schema.Id;
+import org.springframework.data.neo4j.core.schema.Node;
+import org.springframework.data.neo4j.core.schema.Relationship;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
+
+@Node
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@ToString
 public class User implements UserDetails {
 
     @Id @GeneratedValue
@@ -24,41 +40,15 @@ public class User implements UserDetails {
 
     private String roles;
 
-    public String getRoles() {
-        return roles;
-    }
+    @Relationship(type = "LIKES", direction = Relationship.Direction.OUTGOING)
+    private Set<User> likes;
 
-    public void setRoles(String roles) {
-        this.roles = roles;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-    
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-    
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
+    @Relationship(type = "MATCHED_WITH")
+    private Set<User> matches;
 
     @Override
     public String getUsername() {
         return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
     }
 
     @Override
@@ -66,15 +56,30 @@ public class User implements UserDetails {
         return password;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return Arrays.stream(roles.split(","))
                 .map(SimpleGrantedAuthority::new)
                 .toList();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        } 
+
+        if (o == null || this.getClass() != o.getClass()) {
+            return false;
+        }
+
+        User user = (User) o;
+        return this.username.equals(user.getUsername());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(username);
     }
 
 }
